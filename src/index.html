@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>IT Asset Trader</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="dashboard" aria-label="Game status">
+      <div class="dashboard-stats">
+        <article class="stat">
+          <span class="stat-label"><svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></svg>Day</span>
+          <strong id="day-stat">1 / 30</strong>
+        </article>
+        <article class="stat">
+          <span class="stat-label"><svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15 8.5c-.7-.7-1.6-1-3-1-1.7 0-3 .8-3 2s1.3 2 3 2 3 .8 3 2-1.3 2-3 2c-1.4 0-2.3-.3-3-1m3-8v13"/></svg>Cash</span>
+          <strong id="cash-stat" class="status-positive">2,000 EUR</strong>
+        </article>
+        <article class="stat">
+          <span class="stat-label"><svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10m-10 6h4"/></svg>Debt</span>
+          <strong id="debt-stat" class="status-negative">5,000 EUR</strong>
+        </article>
+        <article class="stat">
+          <span class="stat-label"><svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18M5 16l5-5 3 3 6-7"/><path d="M15 7h4v4"/></svg>Net worth</span>
+          <strong id="networth-stat" class="status-negative">-3,000 EUR</strong>
+        </article>
+      </div>
+        <div class="dashboard-actions">
+          <button id="header-travel-button" class="button button-travel" type="button" data-tab="travel" aria-selected="false">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l2-6h14l2 6v4h-2v-2H5v2H3zM5 15h14"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+            <span>Travel</span>
+          </button>
+          <button id="reset-button" class="button button-new-run" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <span>New game</span>
+          </button>
+        </div>
+    </section>
+
+    <div class="tab-content">
+      <section class="tab-panel is-active" id="market-tab" data-tab-panel="market">
+        <div class="game-grid">
+      <section class="panel">
+        <div class="panel-heading">
+          <h2 id="market-heading">Market</h2>
+          <span id="market-count"></span>
+        </div>
+        <div id="market-list" class="market-list"></div>
+        <button id="trade-history-button" class="button button-secondary button-full trade-history-button" type="button">View trading history</button>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel">
+          <h2 id="pockets-heading">Pockets (0 / 10)</h2>
+          <div id="pockets-list" class="pockets-list"></div>
+        </section>
+
+        <p id="milestone-banner" class="milestone-banner" role="status" hidden></p>
+        <section class="panel market-profile" aria-labelledby="market-location-name">
+          <h3 id="market-location-name"></h3>
+          <div class="contact-card">
+            <div id="contact-portrait"></div>
+            <div>
+              <h4 id="contact-name"></h4>
+              <p id="contact-dialogue"></p>
+            </div>
+          </div>
+          <p id="market-profile"></p>
+        </section>
+        <section class="panel developer-panel">
+          <h2>Developer tools</h2>
+          <button id="dev-advance-button" class="button button-full" type="button">Advance 5 days</button>
+          <button id="dev-end-button" class="button button-full button-secondary" type="button">Advance to day 30</button>
+          <button id="dev-cash-button" class="button button-full button-secondary" type="button">Add 10,000 EUR</button>
+          <button id="dev-repay-button" class="button button-full button-secondary" type="button">Clear loan</button>
+        </section>
+        <section class="ad-grid" aria-label="Advertisement placeholders">
+          <div class="ad-placeholder">Ad 1</div>
+          <div class="ad-placeholder">Ad 2</div>
+          <div class="ad-placeholder">Ad 3</div>
+        </section>
+      </aside>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="travel-tab" data-tab-panel="travel">
+        <div class="panel">
+          <div class="panel-heading"><h2>Travel</h2><span id="travel-location-name"></span></div>
+          <img class="view-illustration" src="images/travel.svg" alt="Trading van travelling between city markets" width="640" height="180">
+          <div id="travel-list" class="travel-list"></div>
+          <p class="hint">Travel completes the day and advances prices.</p>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="loan-tab" data-tab-panel="loan">
+        <div class="panel">
+          <h2>Loan</h2>
+          <img class="view-illustration" src="images/loan.svg" alt="Bank building and coins representing your loan" width="640" height="180">
+          <p id="loan-status">Due at the end of day 10</p>
+          <button id="repay-button" class="button button-full" type="button">Repay 100 EUR</button>
+          <button id="repay-all-button" class="button button-full button-secondary" type="button">Repay all</button>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="storage-tab" data-tab-panel="storage">
+        <div class="panel">
+          <h2>Storage</h2>
+          <img class="view-illustration" src="images/storage.svg" alt="Equipment cases and shelves for storing traded hardware" width="640" height="180">
+          <p id="storage-status" class="hint"></p>
+          <div id="upgrade-list" class="upgrade-list"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="vertical-toolbar" aria-label="Game navigation">
+    <div class="rail-header">
+      <div class="app-logo" aria-label="IT Asset Trader app icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5M8 17h8"/></svg>
+      </div>
+      <h1>IT Asset Trader</h1>
+    </div>
+    <button class="is-active" type="button" data-tab="market" aria-label="Market" title="Market" aria-selected="true">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+      <span>Market</span>
+    </button>
+    <button type="button" data-tab="travel" aria-label="Travel" title="Travel" aria-selected="false">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l2-6h14l2 6v4h-2v-2H5v2H3zM5 15h14M7 11l-1 4m11-4 1 4"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+      <span>Travel</span>
+    </button>
+    <button type="button" data-tab="loan" aria-label="Loan" title="Loan" aria-selected="false">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="1"/><path d="M5 9h14M5 15h14M8 12h.01M16 12h.01"/></svg>
+      <span>Loan</span>
+    </button>
+    <button type="button" data-tab="storage" aria-label="Storage" title="Storage" aria-selected="false">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h8M8 12h8M8 16h3"/></svg>
+      <span>Storage</span>
+    </button>
+    <button id="highscores-button" type="button" data-open-dialog="highscores-dialog" aria-label="Highscores" title="Highscores" aria-selected="false">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v6a5 5 0 0 1-10 0zM7 5H3v3a4 4 0 0 0 4 4m10-7h4v3a4 4 0 0 1-4 4M12 14v5m-4 2h8"/></svg>
+      <span>Highscores</span>
+    </button>
+    <button type="button" data-open-dialog="settings-dialog" aria-label="Settings" title="Settings" aria-selected="false">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2h4l.6 2.3a8 8 0 0 1 1.5.9l2.3-.6 2 3.4-1.7 1.7a8 8 0 0 1 0 1.8l1.7 1.7-2 3.4-2.3-.6a8 8 0 0 1-1.5.9L14 22h-4l-.6-2.3a8 8 0 0 1-1.5-.9l-2.3.6-2-3.4 1.7-1.7a8 8 0 0 1 0-1.8L3.6 10l2-3.4 2.3.6a8 8 0 0 1 1.5-.9L10 2z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span>Settings</span>
+    </button>
+    <button type="button" data-open-dialog="about-dialog" aria-label="About" title="About" aria-selected="false">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></svg>
+      <span>About</span>
+    </button>
+  </nav>
+
+  <dialog id="trade-dialog" class="action-dialog">
+    <form method="dialog">
+      <div class="dialog-heading">
+        <h2 id="trade-title">Buy asset</h2>
+        <button class="dialog-close" value="close" aria-label="Close trade">×</button>
+      </div>
+      <p id="trade-summary"></p>
+      <p id="trade-impact" class="trade-impact" aria-live="polite"></p>
+      <label class="quantity-control">
+        <span><strong>Quantity</strong><output id="trade-quantity">1</output></span>
+        <input id="trade-slider" type="range" min="1" max="1" value="1">
+      </label>
+      <div class="trade-presets" aria-label="Quantity shortcuts">
+        <button class="button button-secondary" type="button" data-trade-quantity="1">1</button>
+        <button class="button button-secondary" type="button" data-trade-quantity="half">Half</button>
+        <button class="button button-secondary" type="button" data-trade-quantity="max">Max</button>
+      </div>
+      <button id="trade-confirm" class="button button-full" type="button">Confirm</button>
+    </form>
+  </dialog>
+
+  <dialog id="event-dialog" class="action-dialog event-dialog" aria-labelledby="event-title" aria-describedby="event-story event-description">
+    <form method="dialog">
+      <p class="eyebrow">Market event</p>
+      <h2 id="event-title"></h2>
+      <p id="event-story" class="event-story"></p>
+      <p id="event-description"></p>
+      <dl class="event-details">
+        <div><dt>Affected assets</dt><dd id="event-assets"></dd></div>
+        <div><dt>Price impact</dt><dd id="event-price-impact"></dd></div>
+        <div><dt>Duration</dt><dd id="event-duration"></dd></div>
+      </dl>
+      <button id="acknowledge-event-button" class="button button-full" type="button">OK</button>
+    </form>
+  </dialog>
+
+  <dialog id="loan-warning-dialog" class="action-dialog loan-warning-dialog" aria-labelledby="loan-warning-title" aria-describedby="loan-warning-message">
+    <div class="loan-warning-content">
+      <div class="loan-warning-icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M24 4 45 42H3L24 4Z"/><path d="M24 17v12m0 7h.01"/></svg>
+      </div>
+      <p class="eyebrow">Loan deadline</p>
+      <h2 id="loan-warning-title">Loan due soon</h2>
+      <p id="loan-warning-message"></p>
+      <button id="acknowledge-loan-warning-button" class="button button-full" type="button">OK</button>
+    </div>
+  </dialog>
+
+  <dialog id="reset-dialog" class="action-dialog reset-dialog">
+    <form method="dialog">
+      <div class="reset-dialog-content">
+        <div class="app-logo reset-logo" aria-label="IT Asset Trader app icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5M8 17h8"/></svg>
+        </div>
+        <h2>Start a new game?</h2>
+        <p>Starting a new game will abort the current game and replace its saved progress.</p>
+        <div class="dialog-actions">
+          <button class="button button-secondary" value="cancel">Cancel</button>
+          <button id="confirm-reset-button" class="button" value="reset" type="button">Start new game</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="settings-dialog" class="action-dialog reset-dialog">
+    <form method="dialog">
+      <div class="reset-dialog-content">
+        <div class="app-logo reset-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2h4l.6 2.3a8 8 0 0 1 1.5.9l2.3-.6 2 3.4-1.7 1.7a8 8 0 0 1 0 1.8l1.7 1.7-2 3.4-2.3-.6a8 8 0 0 1-1.5.9L14 22h-4l-.6-2.3a8 8 0 0 1-1.5-.9l-2.3.6-2-3.4 1.7-1.7a8 8 0 0 1 0-1.8L3.6 10l2-3.4 2.3.6a8 8 0 0 1 1.5-.9L10 2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h2>Settings</h2>
+        <label class="setting-row">
+          <span>Reduced motion</span>
+          <input id="reduced-motion-setting" type="checkbox">
+        </label>
+        <label class="setting-row">
+          <span>Game notifications</span>
+          <input id="notifications-setting" type="checkbox" checked>
+        </label>
+        <button class="button button-full" value="close">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="about-dialog" class="action-dialog reset-dialog">
+    <form method="dialog">
+      <div class="reset-dialog-content">
+        <div class="app-logo reset-logo" aria-label="IT Asset Trader app icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5M8 17h8"/></svg>
+        </div>
+        <h2>IT Asset Trader</h2>
+        <p>Version 0.1.0 - Proof of concept</p>
+        <p>Give good tech a second life. Meet the locals and trade smart.</p>
+        <button class="button button-full" value="close">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <dialog id="highscores-dialog" class="action-dialog" aria-labelledby="highscores-title">
+    <form method="dialog">
+      <div class="highscores-heading">
+        <div class="app-logo reset-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M7 3h10v6a5 5 0 0 1-10 0zM7 5H3v3a4 4 0 0 0 4 4m10-7h4v3a4 4 0 0 1-4 4M12 14v5m-4 2h8"/></svg>
+        </div>
+        <h2 id="highscores-title">Highscores</h2>
+      </div>
+      <p class="hint">Ranked by final net worth: cash + inventory value - debt. Earlier entries win ties.</p>
+      <p id="highscores-error" class="status-negative" role="alert"></p>
+      <div class="highscores-table-wrap">
+        <table class="highscores-table">
+          <thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Money</th><th scope="col">Date</th></tr></thead>
+          <tbody id="highscores-list"></tbody>
+        </table>
+      </div>
+      <p id="highscores-empty" class="hint">No results yet. Finish a run to set a highscore.</p>
+      <p class="hint">This is a local highscore list, not a global leaderboard. Results stay in this browser on this device. Clearing browser data removes them.</p>
+      <button class="button button-full" value="close">Close</button>
+    </form>
+  </dialog>
+
+  <dialog id="end-dialog" class="action-dialog" aria-labelledby="end-title">
+    <div>
+      <p class="eyebrow" id="end-eyebrow">Run complete</p>
+      <h2 id="end-title">Game over</h2>
+      <p id="end-message"></p>
+      <section class="trader-ending" aria-labelledby="end-trader-title">
+        <p class="eyebrow">Your trading alter ego</p>
+        <h3 id="end-trader-title"></h3>
+        <p id="end-trader-story"></p>
+      </section>
+      <dl class="end-stats">
+        <div><dt>Final score</dt><dd id="end-score">0</dd></div>
+        <div><dt>Net worth</dt><dd id="end-networth">0 EUR</dd></div>
+        <div><dt>Realized trading profit</dt><dd id="end-trading-profit">0 EUR</dd></div>
+        <div class="end-highlight"><dt>Best sale (by profit)</dt><dd id="end-best-sale"></dd></div>
+        <div class="end-highlight"><dt>Favourite stop</dt><dd id="end-favourite-location"></dd></div>
+      </dl>
+      <p id="end-statistics-note" class="hint"></p>
+      <p id="end-highscore-message" role="status"></p>
+      <form id="highscore-entry" hidden>
+        <label for="highscore-name">Player name</label>
+        <input id="highscore-name" name="player-name" type="text" maxlength="24" autocomplete="nickname" required>
+        <button class="button button-full" type="submit">Save result &amp; view top 10</button>
+      </form>
+      <button id="end-highscores-button" class="button button-secondary button-full" type="button">View local top 10</button>
+      <button id="play-again-button" class="button button-full" type="button">Play again</button>
+    </div>
+  </dialog>
+
+  <dialog id="trade-history-dialog" class="action-dialog trade-history-dialog" aria-labelledby="trade-history-title">
+    <form method="dialog">
+      <div class="dialog-heading">
+        <h2 id="trade-history-title">Trading history</h2>
+        <button class="dialog-close" value="close" aria-label="Close trading history">×</button>
+      </div>
+      <p class="hint">Trades are listed in day order. Sales show profit or loss against average purchase cost.</p>
+      <p id="trade-history-empty" class="hint">No trades recorded yet.</p>
+      <div class="trade-history-table-wrap">
+        <table class="trade-history-table">
+          <thead>
+            <tr>
+              <th scope="col">Day</th>
+              <th scope="col">Location</th>
+              <th scope="col">Trade</th>
+              <th scope="col">Item</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Money</th>
+              <th scope="col">Win / Loss</th>
+            </tr>
+          </thead>
+          <tbody id="trade-history-list"></tbody>
+        </table>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if (window.location.protocol !== "file:") {
+      !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p||((p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",p.onerror=function(){p=null},(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r));var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],Object.defineProperty(u,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e}}),Object.defineProperty(u.people,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)}}),o="Eh Rh Ph Oh Dh qh init yd bd dd fd Sd wc md xd ad Ed Ad Rd Pd Od Fd capture getExtension gr pd gd calculateEventProperties Dd register register_once register_for_session unregister unregister_for_session zd hd jd getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys onActiveMatchingSurveysChanged renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Hd identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset Ud shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty qd Td createPersonProfile setInternalOrTestUser Bd Uh zh opt_in_capturing opt_out_capturing Hh has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $d debug kc Ds getPageViewId captureTraceFeedback captureTraceMetric rd".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+      posthog.init('phc_qGnEf3epUou9DTpKcWRx2KDybjLfKytNMw8CsF2mbuqe', {
+        api_host: 'https://eu.i.posthog.com',
+        defaults: '2026-05-30',
+        person_profiles: 'identified_only',
+      });
+    }
+  </script>
+</body>
+</html>
