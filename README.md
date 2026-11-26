@@ -6,6 +6,4 @@ We are buying and selling IT Assets instead of drugs.
 
 
 ## Demo
-You can find the public demo of the game [here](yafp/githubpageslink).
-
-
+You can find the public demo of the game here: [yafp.github.io/itat/](https://yafp.github.io/itat/).
