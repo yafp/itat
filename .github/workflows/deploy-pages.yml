@@ -1,0 +1,41 @@
+name: Deploy src to GitHub Pages on Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one deployment at a time without cancelling in-progress runs
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Upload src contents as Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: src
+          include-hidden-files: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
